@@ -2,6 +2,17 @@ import Link from 'next/link'
 
 const posts = [
   {
+    href: '/blog/chto-takoe-api-sajta',
+    tag: 'API и интеграции',
+    tagColor: 'rgba(16,185,129,0.35)',
+    tagBg: 'rgba(16,185,129,0.1)',
+    tagText: '#34d399',
+    date: '27 июля 2026',
+    title: 'Что такое API сайта и для чего он нужен',
+    excerpt:
+      'Как программы общаются между собой, зачем это бизнесу, и какие вебхуки, лимиты и ключи скрываются за словом «интеграция».'
+  },
+  {
     href: '/blog/bitrix24-i-claude-avtomatizaciya-crm',
     tag: 'Автоматизация CRM',
     tagColor: 'rgba(251,146,60,0.35)',
