@@ -2,6 +2,17 @@ import Link from 'next/link'
 
 const posts = [
   {
+    href: '/blog/zachem-biznesu-sajt',
+    tag: 'Сайты для бизнеса',
+    tagColor: 'rgba(244,114,182,0.35)',
+    tagBg: 'rgba(244,114,182,0.1)',
+    tagText: '#f9a8d4',
+    date: '27 июля 2026',
+    title: 'Зачем бизнесу нужен сайт, если есть соцсети и маркетплейсы',
+    excerpt:
+      'Честный разбор: экономика лида, SEO как накопительный актив, интеграции с CRM и когда сайт бизнесу правда не нужен.'
+  },
+  {
     href: '/blog/chto-takoe-api-sajta',
     tag: 'API и интеграции',
     tagColor: 'rgba(16,185,129,0.35)',

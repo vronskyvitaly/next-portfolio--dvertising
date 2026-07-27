@@ -43,6 +43,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date('2026-07-27'),
       changeFrequency: 'yearly',
       priority: 0.8
+    },
+    {
+      url: 'https://vitalyvronsky.ru/blog/zachem-biznesu-sajt',
+      lastModified: new Date('2026-07-27'),
+      changeFrequency: 'yearly',
+      priority: 0.8
     }
   ]
 }
