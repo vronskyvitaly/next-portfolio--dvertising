@@ -5,7 +5,7 @@ import { getLegalDocument, getLegalDocuments } from '@/lib/legal/registry'
 import { LegalPageLayout } from '@/components/legal/LegalPageLayout'
 
 export function generateStaticParams() {
-  return getLegalDocuments(siteConfig).map(doc => ({ slug: doc.slug }))
+  return getLegalDocuments().map(doc => ({ slug: doc.slug }))
 }
 
 export async function generateMetadata({
@@ -14,7 +14,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const doc = getLegalDocument(slug, siteConfig)
+  const doc = getLegalDocument(slug)
   if (!doc) return {}
   return {
     title: doc.title,
@@ -29,7 +29,7 @@ export default async function LegalDocPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const doc = getLegalDocument(slug, siteConfig)
+  const doc = getLegalDocument(slug)
   if (!doc) notFound()
 
   const revision = siteConfig.revisions[doc.slug]

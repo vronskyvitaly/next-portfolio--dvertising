@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 
 type Step = 'login' | 'name' | 'dashboard' | 'project-type' | 'questions' | 'success'
@@ -512,10 +513,14 @@ export default function BriefPage() {
     return data
   }, [])
 
-  // Восстановить сессию при загрузке
+  // Восстановить сессию при загрузке.
+  // localStorage доступен только после монтирования, поэтому setState здесь
+  // осознанный: ленивая инициализация состояния читала бы пустое значение на
+  // сервере и ломала гидратацию статически пререндеренной страницы.
   useEffect(() => {
     const savedEmail = localStorage.getItem('brief_email')
     if (!savedEmail) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEmailInput(savedEmail)
     setLoading(true)
     loadUserBriefs(savedEmail)
@@ -701,12 +706,12 @@ export default function BriefPage() {
         style={{ background: 'radial-gradient(circle, rgba(0,112,243,0.10) 0%, transparent 70%)' }} />
 
       <div className='w-full max-w-xl relative'>
-        <a href='/' className='inline-flex items-center gap-2 mb-8 text-sm text-[#666] hover:text-[#999] transition-colors'>
+        <Link href='/' className='inline-flex items-center gap-2 mb-8 text-sm text-[#666] hover:text-[#999] transition-colors'>
           <svg width='16' height='16' viewBox='0 0 16 16' fill='none'>
             <path d='M10 12L6 8l4-4' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
           </svg>
           На главную
-        </a>
+        </Link>
 
         {/* Progress bar */}
         {step !== 'success' && step !== 'dashboard' && (

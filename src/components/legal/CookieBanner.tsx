@@ -1,20 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { readConsent, writeConsent } from '@/lib/legal/consent'
+import { useSyncExternalStore } from 'react'
+import { onConsentChange, readConsent, writeConsent } from '@/lib/legal/consent'
+
+// Cookie доступны только в браузере, поэтому серверный снимок всегда скрывает
+// баннер — иначе он мигнёт при гидратации у посетителей с сохранённым выбором.
+const subscribe = (onStoreChange: () => void) => onConsentChange(onStoreChange)
+const getSnapshot = () => readConsent() === null
+const getServerSnapshot = () => false
 
 export function CookieBanner() {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    if (readConsent() === null) setVisible(true)
-  }, [])
-
-  const handleConsent = (state: 'granted' | 'denied') => {
-    writeConsent(state)
-    setVisible(false)
-  }
+  const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
   if (!visible) return null
 
@@ -53,7 +50,7 @@ export function CookieBanner() {
         <div className='flex items-center gap-2 shrink-0'>
           <button
             type='button'
-            onClick={() => handleConsent('denied')}
+            onClick={() => writeConsent('denied')}
             className='px-4 py-2 rounded-xl text-xs font-medium text-gray-400 hover:text-white transition-colors'
             style={{ border: '1px solid rgba(255,255,255,0.1)' }}
           >
@@ -61,7 +58,7 @@ export function CookieBanner() {
           </button>
           <button
             type='button'
-            onClick={() => handleConsent('granted')}
+            onClick={() => writeConsent('granted')}
             className='px-4 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:scale-105'
             style={{ background: 'linear-gradient(135deg, #7d2cc8, #0070f3)' }}
           >

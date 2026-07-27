@@ -1,5 +1,4 @@
 import type { ComponentType } from 'react'
-import { siteConfig } from '@/config/site.config'
 import { CookiePolicy } from '@/legal/cookie-policy'
 import { PersonalDataConsent } from '@/legal/personal-data-consent'
 import { PrivacyPolicy } from '@/legal/privacy-policy'
@@ -49,15 +48,12 @@ const ALL_DOCUMENTS: LegalDocument[] = [
   }
 ]
 
-export function getLegalDocuments(config: SiteLegalConfig = siteConfig): LegalDocument[] {
+export function getLegalDocuments(): LegalDocument[] {
   return ALL_DOCUMENTS
 }
 
-export function getLegalDocument(
-  slug: string,
-  config: SiteLegalConfig = siteConfig
-): LegalDocument | undefined {
-  return getLegalDocuments(config).find(doc => doc.slug === slug)
+export function getLegalDocument(slug: string): LegalDocument | undefined {
+  return getLegalDocuments().find(doc => doc.slug === slug)
 }
 
 const PLACEHOLDER_PATTERN = /<[^<>]+>/

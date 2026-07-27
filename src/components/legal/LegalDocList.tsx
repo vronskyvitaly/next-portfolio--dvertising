@@ -3,7 +3,7 @@ import { getLegalDocuments } from '@/lib/legal/registry'
 import { LegalDocCard } from './LegalDocCard'
 
 export function LegalDocList() {
-  const documents = getLegalDocuments(siteConfig)
+  const documents = getLegalDocuments()
 
   return (
     <ul className='space-y-4'>
