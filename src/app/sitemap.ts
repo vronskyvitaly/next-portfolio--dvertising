@@ -49,6 +49,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date('2026-07-27'),
       changeFrequency: 'yearly',
       priority: 0.8
+    },
+    {
+      url: 'https://vitalyvronsky.ru/blog/sozdanie-sajtov-v-moskve',
+      lastModified: new Date('2026-07-28'),
+      changeFrequency: 'yearly',
+      priority: 0.8
     }
   ]
 }
