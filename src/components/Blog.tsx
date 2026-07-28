@@ -2,6 +2,17 @@ import Link from 'next/link'
 
 const posts = [
   {
+    href: '/blog/analiz-sajtov-konkurentov',
+    tag: 'Анализ конкурентов',
+    tagColor: 'rgba(34,211,238,0.35)',
+    tagBg: 'rgba(34,211,238,0.1)',
+    tagText: '#22d3ee',
+    date: '29 июля 2026',
+    title: 'Анализ сайтов конкурентов: подходы и инструменты',
+    excerpt:
+      'Как искать конкурентов, какие метрики и технические показатели смотреть, какими сервисами пользоваться и как выделить свой сайт среди конкурентов.'
+  },
+  {
     href: '/blog/sozdanie-sajtov-v-moskve',
     tag: 'Разработка сайтов',
     tagColor: 'rgba(251,191,36,0.35)',

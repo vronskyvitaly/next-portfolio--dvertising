@@ -55,6 +55,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date('2026-07-28'),
       changeFrequency: 'yearly',
       priority: 0.8
+    },
+    {
+      url: 'https://vitalyvronsky.ru/blog/analiz-sajtov-konkurentov',
+      lastModified: new Date('2026-07-29'),
+      changeFrequency: 'yearly',
+      priority: 0.8
     }
   ]
 }
