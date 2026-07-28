@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 const services = [
   {
     num: '01',
@@ -31,7 +33,9 @@ const services = [
     accent: '#0070f3',
     glow: 'rgba(0,112,243,0.12)',
     border: 'rgba(0,112,243,0.3)',
-    topLine: 'linear-gradient(90deg, transparent, #0070f3, transparent)'
+    topLine: 'linear-gradient(90deg, transparent, #0070f3, transparent)',
+    href: '/sozdanie-saytov',
+    hrefLabel: 'Цены и сроки по типам сайтов'
   },
   {
     num: '03',
@@ -148,6 +152,25 @@ export default function Services() {
                     </li>
                   ))}
                 </ul>
+
+                {service.href && (
+                  <Link
+                    href={service.href}
+                    className='mt-6 inline-flex items-center gap-2 text-sm font-medium transition-all hover:gap-3'
+                    style={{ color: service.accent }}
+                  >
+                    {service.hrefLabel}
+                    <svg width='14' height='14' viewBox='0 0 14 14' fill='none'>
+                      <path
+                        d='M3 7h8M8 4l3 3-3 3'
+                        stroke='currentColor'
+                        strokeWidth='1.5'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      />
+                    </svg>
+                  </Link>
+                )}
               </div>
             </div>
           ))}

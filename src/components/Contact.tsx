@@ -1,3 +1,5 @@
+import { contacts } from '@/config/contacts'
+
 export default function Contact() {
   return (
     <section id='contact' className='py-12 sm:py-24 px-6'>
@@ -111,14 +113,37 @@ export default function Contact() {
           </a>
         </div>
 
+        {/* Телефон */}
+        <a
+          href={contacts.phoneHref}
+          className='flex items-center justify-center gap-3 p-5 rounded-2xl mb-6 transition-all hover:-translate-y-0.5'
+          style={{
+            background: '#111',
+            border: '1px solid rgba(255,255,255,0.07)'
+          }}
+        >
+          <svg width='18' height='18' viewBox='0 0 24 24' fill='none'>
+            <path
+              d='M5 4h3l2 5-2 1a11 11 0 0 0 6 6l1-2 5 2v3a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z'
+              stroke='#c084fc'
+              strokeWidth='1.5'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+            />
+          </svg>
+          <span className='text-base sm:text-lg font-semibold text-white'>
+            {contacts.phone}
+          </span>
+        </a>
+
         {/* Email */}
         <p className='text-center text-sm text-[#444]'>
           Или напишите на{' '}
           <a
-            href='mailto:vronskyvitaly@mail.ru'
+            href={contacts.emailHref}
             className='text-[#666] hover:text-[#999] transition-colors underline underline-offset-4 decoration-[#333]'
           >
-            vronskyvitaly@mail.ru
+            {contacts.email}
           </a>
         </p>
       </div>

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import BlogBreadcrumbs from '@/components/BlogBreadcrumbs'
+import { ogImages } from '@/lib/og'
 
 const PUBLISHED = '2026-07-27'
 const URL_PATH = '/blog/chto-takoe-api-sajta'
@@ -24,6 +26,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: 'article',
+    images: ogImages(),
     url: FULL_URL,
     title: 'Что такое API сайта и для чего он нужен',
     description:
@@ -35,6 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    images: ogImages(),
     title: 'Что такое API сайта и для чего он нужен',
     description:
       'Как программы общаются между собой, зачем это бизнесу и на что смотреть перед интеграцией.'
@@ -332,21 +336,7 @@ export default function Page() {
         />
 
         <div className='relative z-10 max-w-3xl mx-auto px-6 py-16 sm:py-24'>
-          <Link
-            href='/'
-            className='inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-12'
-          >
-            <svg width='16' height='16' viewBox='0 0 16 16' fill='none'>
-              <path
-                d='M10 12L6 8l4-4'
-                stroke='currentColor'
-                strokeWidth='1.5'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            </svg>
-            На главную
-          </Link>
+          <BlogBreadcrumbs path={URL_PATH} />
 
           <header className='mb-12'>
             <div className='flex flex-wrap gap-2 mb-6'>

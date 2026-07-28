@@ -1,66 +1,69 @@
 import type { MetadataRoute } from 'next'
+import { SITE_URL } from '@/config/contacts'
+import { getPosts } from '@/config/posts'
+import { getServices } from '@/config/services'
+import { getLegalDocuments } from '@/lib/legal/registry'
+import { siteConfig } from '@/config/site.config'
+
+/**
+ * Карта сайта строится из реестров, а не руками — иначе новые страницы
+ * забываются, как это случилось с /legal.
+ *
+ * `/brief` в карту не попадает намеренно: страница под noindex.
+ *
+ * Дату правьте при существенном обновлении коммерческого раздела.
+ */
+const SECTION_UPDATED = new Date('2026-07-29')
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const services = getServices()
+  const posts = getPosts()
+  const legalDocs = getLegalDocuments()
+
   return [
     {
-      url: 'https://vitalyvronsky.ru',
-      lastModified: new Date(),
+      url: SITE_URL,
+      lastModified: SECTION_UPDATED,
       changeFrequency: 'monthly',
       priority: 1
     },
     {
-      url: 'https://vitalyvronsky.ru/blog/avtomatizaciya-biznesa',
-      lastModified: new Date('2026-06-08'),
-      changeFrequency: 'yearly',
-      priority: 0.8
+      url: `${SITE_URL}/sozdanie-saytov`,
+      lastModified: SECTION_UPDATED,
+      changeFrequency: 'monthly',
+      priority: 0.9
     },
-    {
-      url: 'https://vitalyvronsky.ru/blog/kak-ustanovit-claude-code',
-      lastModified: new Date('2026-06-08'),
-      changeFrequency: 'yearly',
+    ...services.map(service => ({
+      url: `${SITE_URL}/sozdanie-saytov/${service.slug}`,
+      lastModified: SECTION_UPDATED,
+      changeFrequency: 'monthly' as const,
       priority: 0.8
+    })),
+    {
+      url: `${SITE_URL}/blog`,
+      lastModified: new Date(posts[0]?.published ?? SECTION_UPDATED),
+      changeFrequency: 'weekly',
+      priority: 0.7
     },
+    ...posts.map(post => ({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: new Date(post.published),
+      changeFrequency: 'yearly' as const,
+      priority: 0.6
+    })),
     {
-      url: 'https://vitalyvronsky.ru/blog/sozdanie-sajtov-nado-znat',
-      lastModified: new Date('2026-06-08'),
+      url: `${SITE_URL}/legal`,
+      lastModified: SECTION_UPDATED,
       changeFrequency: 'yearly',
-      priority: 0.8
+      priority: 0.3
     },
-    {
-      url: 'https://vitalyvronsky.ru/blog/telegram-boty-dlya-biznesa',
-      lastModified: new Date('2026-07-07'),
-      changeFrequency: 'yearly',
-      priority: 0.8
-    },
-    {
-      url: 'https://vitalyvronsky.ru/blog/bitrix24-i-claude-avtomatizaciya-crm',
-      lastModified: new Date('2026-07-21'),
-      changeFrequency: 'yearly',
-      priority: 0.8
-    },
-    {
-      url: 'https://vitalyvronsky.ru/blog/chto-takoe-api-sajta',
-      lastModified: new Date('2026-07-27'),
-      changeFrequency: 'yearly',
-      priority: 0.8
-    },
-    {
-      url: 'https://vitalyvronsky.ru/blog/zachem-biznesu-sajt',
-      lastModified: new Date('2026-07-27'),
-      changeFrequency: 'yearly',
-      priority: 0.8
-    },
-    {
-      url: 'https://vitalyvronsky.ru/blog/sozdanie-sajtov-v-moskve',
-      lastModified: new Date('2026-07-28'),
-      changeFrequency: 'yearly',
-      priority: 0.8
-    },
-    {
-      url: 'https://vitalyvronsky.ru/blog/analiz-sajtov-konkurentov',
-      lastModified: new Date('2026-07-29'),
-      changeFrequency: 'yearly',
-      priority: 0.8
-    }
+    ...legalDocs.map(doc => ({
+      url: `${SITE_URL}/legal/${doc.slug}`,
+      lastModified: new Date(
+        siteConfig.revisions[doc.slug]?.effectiveDate ?? SECTION_UPDATED
+      ),
+      changeFrequency: 'yearly' as const,
+      priority: 0.2
+    }))
   ]
 }

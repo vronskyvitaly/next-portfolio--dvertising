@@ -123,8 +123,8 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Статистика */}
-        <div className='hidden lg:flex items-center justify-center gap-6'>
+        {/* Статистика — трастовые сигналы видны и на мобильных */}
+        <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-6'>
           {stats.map((stat, i) => (
             <div key={stat.label} className='flex items-center gap-3 sm:gap-6'>
               {stat.accent ? (

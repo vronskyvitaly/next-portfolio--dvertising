@@ -58,3 +58,26 @@ export async function ensureTables() {
 
   initialized = true
 }
+
+let leadsInitialized = false
+
+/**
+ * Быстрые заявки с коммерческих страниц — отдельно от briefs:
+ * у них другой жизненный цикл и нет привязки к зарегистрированному пользователю.
+ */
+export async function ensureLeadsTable() {
+  if (leadsInitialized) return
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS leads (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      contact TEXT NOT NULL,
+      task TEXT NOT NULL DEFAULT '',
+      source TEXT NOT NULL DEFAULT '',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `)
+
+  leadsInitialized = true
+}

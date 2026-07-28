@@ -1,109 +1,9 @@
 import Link from 'next/link'
-
-const posts = [
-  {
-    href: '/blog/analiz-sajtov-konkurentov',
-    tag: 'Анализ конкурентов',
-    tagColor: 'rgba(34,211,238,0.35)',
-    tagBg: 'rgba(34,211,238,0.1)',
-    tagText: '#22d3ee',
-    date: '29 июля 2026',
-    title: 'Анализ сайтов конкурентов: подходы и инструменты',
-    excerpt:
-      'Как искать конкурентов, какие метрики и технические показатели смотреть, какими сервисами пользоваться и как выделить свой сайт среди конкурентов.'
-  },
-  {
-    href: '/blog/sozdanie-sajtov-v-moskve',
-    tag: 'Разработка сайтов',
-    tagColor: 'rgba(251,191,36,0.35)',
-    tagBg: 'rgba(251,191,36,0.1)',
-    tagText: '#fbbf24',
-    date: '28 июля 2026',
-    title: 'Создание сайтов под ключ: сколько стоит и как заказать сайт',
-    excerpt:
-      'Из чего складывается цена сайта, сколько занимает разработка по этапам и как выбрать подрядчика, чтобы не переплатить и не переделывать через полгода.'
-  },
-  {
-    href: '/blog/zachem-biznesu-sajt',
-    tag: 'Сайты для бизнеса',
-    tagColor: 'rgba(244,114,182,0.35)',
-    tagBg: 'rgba(244,114,182,0.1)',
-    tagText: '#f9a8d4',
-    date: '27 июля 2026',
-    title: 'Зачем бизнесу нужен сайт, если есть соцсети и маркетплейсы',
-    excerpt:
-      'Честный разбор: экономика лида, SEO как накопительный актив, интеграции с CRM и когда сайт бизнесу правда не нужен.'
-  },
-  {
-    href: '/blog/chto-takoe-api-sajta',
-    tag: 'API и интеграции',
-    tagColor: 'rgba(16,185,129,0.35)',
-    tagBg: 'rgba(16,185,129,0.1)',
-    tagText: '#34d399',
-    date: '27 июля 2026',
-    title: 'Что такое API сайта и для чего он нужен',
-    excerpt:
-      'Как программы общаются между собой, зачем это бизнесу, и какие вебхуки, лимиты и ключи скрываются за словом «интеграция».'
-  },
-  {
-    href: '/blog/bitrix24-i-claude-avtomatizaciya-crm',
-    tag: 'Автоматизация CRM',
-    tagColor: 'rgba(251,146,60,0.35)',
-    tagBg: 'rgba(251,146,60,0.1)',
-    tagText: '#fb923c',
-    date: '21 июля 2026',
-    title: 'Bitrix24 + Claude: автоматизация CRM без программиста',
-    excerpt:
-      'Как подключить Claude к Bitrix24 через MCP-сервер, автоматизировать сделки через Claude Code и создавать UI через Claude Design.'
-  },
-  {
-    href: '/blog/telegram-boty-dlya-biznesa',
-    tag: 'Telegram-боты',
-    tagColor: 'rgba(0,136,204,0.35)',
-    tagBg: 'rgba(0,136,204,0.1)',
-    tagText: '#38b6e6',
-    date: '7 июля 2026',
-    title: 'Telegram-бот для бизнеса: продаёт и отвечает 24/7',
-    excerpt:
-      'Что реально умеет Telegram-бот, какие задачи он закрывает лучше менеджера и когда его внедрение окупается за первый же месяц.'
-  },
-  {
-    href: '/blog/sozdanie-sajtov-nado-znat',
-    tag: 'Разработка',
-    tagColor: 'rgba(0,112,243,0.35)',
-    tagBg: 'rgba(0,112,243,0.1)',
-    tagText: '#60a5fa',
-    date: '8 июня 2026',
-    title: 'Создать сайт сейчас легко. Но это ещё не сайт.',
-    excerpt:
-      'No-code и ИИ-конструкторы дали всем возможность «сделать сайт». Разбираю, почему большинство таких сайтов не приносят клиентов — и что реально нужно знать.'
-  },
-  {
-    href: '/blog/avtomatizaciya-biznesa',
-    tag: 'Автоматизация',
-    tagColor: 'rgba(125,44,200,0.35)',
-    tagBg: 'rgba(125,44,200,0.1)',
-    tagText: '#c084fc',
-    date: '8 июня 2026',
-    title:
-      'Автоматизация бизнеса: как убрать рутину и сосредоточиться на росте',
-    excerpt:
-      'Разбираю, что реально можно автоматизировать прямо сейчас — от приёма заявок до аналитики. Инструменты, примеры и пошаговый старт.'
-  },
-  {
-    href: '/blog/kak-ustanovit-claude-code',
-    tag: 'Инструменты',
-    tagColor: 'rgba(125,44,200,0.35)',
-    tagBg: 'rgba(125,44,200,0.1)',
-    tagText: '#c084fc',
-    date: '8 июня 2026',
-    title: 'Как установить Claude Code и начать работать: простая инструкция',
-    excerpt:
-      'Пошаговая инструкция для Mac, Windows и Linux. Простым языком, без технических терминов — от скачивания до первого запроса.'
-  }
-]
+import { formatPostDate, getPosts } from '@/config/posts'
 
 export default function Blog() {
+  const posts = getPosts()
+
   return (
     <section id='blog' className='py-24 px-6'>
       <div className='max-w-5xl mx-auto'>
@@ -119,8 +19,8 @@ export default function Blog() {
         <div className='grid sm:grid-cols-3 gap-6'>
           {posts.map(post => (
             <Link
-              key={post.href}
-              href={post.href}
+              key={post.slug}
+              href={`/blog/${post.slug}`}
               className='group flex flex-col h-full p-6 rounded-2xl border border-white/8 bg-white/3 hover:border-purple-500/30 hover:bg-white/5 transition-all'
             >
               <h3 className='text-lg font-semibold text-white mb-3 group-hover:text-purple-300 transition-colors leading-snug'>
@@ -144,7 +44,12 @@ export default function Blog() {
                   </svg>
                 </span>
                 <div className='flex items-center gap-2'>
-                  <span className='text-xs text-gray-600'>{post.date}</span>
+                  <time
+                    dateTime={post.published}
+                    className='text-xs text-gray-600'
+                  >
+                    {formatPostDate(post.published)}
+                  </time>
                   <span className='text-xs text-gray-700'>·</span>
                   <span className='text-xs' style={{ color: post.tagText }}>
                     {post.tag}
@@ -153,6 +58,20 @@ export default function Blog() {
               </div>
             </Link>
           ))}
+        </div>
+
+        <div className='text-center mt-10'>
+          <Link
+            href='/blog'
+            className='inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all hover:scale-105'
+            style={{
+              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(255,255,255,0.04)',
+              color: 'rgba(255,255,255,0.75)'
+            }}
+          >
+            Все статьи в блоге →
+          </Link>
         </div>
       </div>
     </section>

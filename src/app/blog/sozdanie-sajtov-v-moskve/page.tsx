@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import BlogBreadcrumbs from '@/components/BlogBreadcrumbs'
+import { CATALOG_ROW, formatPrice, getService } from '@/config/services'
+import { ogImages } from '@/lib/og'
 
 const PUBLISHED = '2026-07-28'
 const URL_PATH = '/blog/sozdanie-sajtov-v-moskve'
@@ -23,6 +26,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: 'article',
+    images: ogImages(),
     url: FULL_URL,
     title: 'Создание сайтов в Москве: сколько стоит и как заказать сайт',
     description:
@@ -34,6 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    images: ogImages(),
     title: 'Создание сайтов в Москве: цены и сроки 2026',
     description:
       'Из чего складывается цена сайта, сколько ждать запуска и как не переплатить подрядчику в Москве.'
@@ -44,7 +49,7 @@ export const metadata: Metadata = {
 const faq = [
   {
     q: 'Сколько стоит сайт под ключ?',
-    a: 'Лендинг обойдётся от 50 000 ₽, корпоративный сайт от 90 000 ₽, каталог с формой заявки от 120 000 ₽, интернет-магазин от 150 000 ₽. Итоговая цена зависит от количества страниц, интеграций и объёма дизайна с нуля против готовых блоков.'
+    a: `Лендинг обойдётся ${formatPrice(getService('lending')!.priceFrom)}, корпоративный сайт ${formatPrice(getService('korporativnyy-sayt')!.priceFrom)}, каталог с формой заявки ${formatPrice(CATALOG_ROW.priceFrom)}, интернет-магазин ${formatPrice(getService('internet-magazin')!.priceFrom)}. Итоговая цена зависит от количества страниц, интеграций и объёма дизайна с нуля против готовых блоков.`
   },
   {
     q: 'Сколько по времени делают сайт для бизнеса?',
@@ -135,32 +140,18 @@ const priceComponents = [
   }
 ]
 
+// Цены и сроки берутся из реестра услуг, чтобы не расходились со страницами
 const siteTypes = [
-  {
-    type: 'Лендинг',
-    purpose: 'Один продукт или услуга, проверка гипотезы, рекламная кампания',
-    time: '3-7 дней',
-    budget: 'от 50 000 ₽'
-  },
-  {
-    type: 'Корпоративный сайт',
-    purpose: 'Полная презентация компании: услуги, команда, кейсы, контакты',
-    time: '2-4 недели',
-    budget: 'от 90 000 ₽'
-  },
-  {
-    type: 'Каталог с формой заявки',
-    purpose: 'B2B и услуги со сложным ассортиментом, без онлайн-оплаты',
-    time: '3-5 недель',
-    budget: 'от 120 000 ₽'
-  },
-  {
-    type: 'Интернет-магазин',
-    purpose: 'Онлайн-продажи с оплатой, доставкой и личным кабинетом',
-    time: '4-8 недель',
-    budget: 'от 150 000 ₽'
-  }
-]
+  getService('lending')!,
+  getService('korporativnyy-sayt')!,
+  CATALOG_ROW,
+  getService('internet-magazin')!
+].map(item => ({
+  type: item.name,
+  purpose: item.purpose,
+  time: item.duration,
+  budget: formatPrice(item.priceFrom)
+}))
 
 const stages = [
   {
@@ -267,22 +258,7 @@ export default function Page() {
         />
 
         <div className='relative z-10 max-w-3xl mx-auto px-6 py-16 sm:py-24'>
-          {/* Назад */}
-          <Link
-            href='/'
-            className='inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-12'
-          >
-            <svg width='16' height='16' viewBox='0 0 16 16' fill='none'>
-              <path
-                d='M10 12L6 8l4-4'
-                stroke='currentColor'
-                strokeWidth='1.5'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            </svg>
-            На главную
-          </Link>
+          <BlogBreadcrumbs path={URL_PATH} />
 
           {/* Шапка статьи */}
           <header className='mb-12'>
@@ -325,6 +301,34 @@ export default function Page() {
               честными ответами на вопросы, которые мне задают на каждой
               встрече.
             </p>
+
+            {/* Переход на коммерческую страницу: статья информационная,
+                транзакционный интент отдаём хабу */}
+            <Link
+              href='/sozdanie-saytov'
+              className='group mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl transition-all hover:bg-white/5'
+              style={{
+                background:
+                  'linear-gradient(145deg, rgba(251,191,36,0.1) 0%, rgba(0,112,243,0.06) 100%)',
+                border: '1px solid rgba(251,191,36,0.25)'
+              }}
+            >
+              <div>
+                <p className='text-sm font-semibold text-white mb-1'>
+                  Цены и сроки по типам сайтов
+                </p>
+                <p className='text-sm text-gray-400'>
+                  Лендинг, корпоративный сайт, интернет-магазин,
+                  веб-приложение — со стоимостью и составом работ
+                </p>
+              </div>
+              <span
+                className='shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white transition-transform group-hover:scale-105 whitespace-nowrap'
+                style={{ background: 'linear-gradient(135deg, #7d2cc8, #0070f3)' }}
+              >
+                Смотреть цены →
+              </span>
+            </Link>
           </header>
 
           <article className='space-y-14 text-gray-300 leading-relaxed'>
