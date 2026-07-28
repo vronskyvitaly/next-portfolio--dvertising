@@ -5,7 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import FaqList from '@/components/FaqList'
 import Footer from '@/components/Footer'
 import JsonLd from '@/components/JsonLd'
-import LeadForm from '@/components/LeadForm'
+import ContactCta from '@/components/ContactCta'
 import { contacts, SITE_URL } from '@/config/contacts'
 import { formatPrice, getService, getServices } from '@/config/services'
 import { OG_SERVICES, ogImages } from '@/lib/og'
@@ -110,80 +110,82 @@ export default async function ServicePage({
 
         <div className='relative z-10'>
           {/* Хиро */}
-          <section className='max-w-4xl mx-auto px-6 pt-12 pb-16 sm:pt-16 sm:pb-20'>
-            <Breadcrumbs items={crumbs} />
+          <section className='px-6 pt-12 pb-16 sm:pt-16 sm:pb-20'>
+            <div className='max-w-5xl mx-auto'>
+              <Breadcrumbs items={crumbs} />
 
-            <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6'>
-              {service.h1}
-            </h1>
+              <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6'>
+                {service.h1}
+              </h1>
 
-            <p className='text-base sm:text-xl text-gray-400 max-w-2xl leading-relaxed mb-8'>
-              {service.lead}
-            </p>
+              <p className='text-base sm:text-xl text-gray-400 max-w-2xl leading-relaxed mb-8'>
+                {service.lead}
+              </p>
 
-            {/* Цена и срок */}
-            <div className='grid grid-cols-2 gap-4 max-w-md mb-8'>
-              <div
-                className='rounded-2xl px-5 py-4'
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.07)'
-                }}
-              >
-                <div className='text-xs uppercase tracking-widest text-[#555] mb-1'>
-                  Цена
+              {/* Цена и срок */}
+              <div className='grid grid-cols-2 gap-4 max-w-md mb-8'>
+                <div
+                  className='rounded-2xl px-5 py-4'
+                  style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.07)'
+                  }}
+                >
+                  <div className='text-xs uppercase tracking-widest text-[#555] mb-1'>
+                    Цена
+                  </div>
+                  <div
+                    className='text-lg font-bold'
+                    style={{ color: service.accent }}
+                  >
+                    {formatPrice(service.priceFrom)}
+                  </div>
                 </div>
                 <div
-                  className='text-lg font-bold'
-                  style={{ color: service.accent }}
+                  className='rounded-2xl px-5 py-4'
+                  style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.07)'
+                  }}
                 >
-                  {formatPrice(service.priceFrom)}
+                  <div className='text-xs uppercase tracking-widest text-[#555] mb-1'>
+                    Срок
+                  </div>
+                  <div className='text-lg font-bold text-white'>
+                    {service.duration}
+                  </div>
                 </div>
               </div>
-              <div
-                className='rounded-2xl px-5 py-4'
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.07)'
-                }}
-              >
-                <div className='text-xs uppercase tracking-widest text-[#555] mb-1'>
-                  Срок
-                </div>
-                <div className='text-lg font-bold text-white'>
-                  {service.duration}
-                </div>
-              </div>
-            </div>
 
-            <div className='flex flex-col sm:flex-row gap-3'>
-              <a
-                href='#zayavka'
-                className='inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-white text-base transition-all hover:scale-105'
-                style={{
-                  background: 'linear-gradient(135deg, #7d2cc8, #0070f3)',
-                  boxShadow: '0 0 32px rgba(125,44,200,0.4)'
-                }}
-              >
-                Обсудить проект →
-              </a>
-              <a
-                href={contacts.phoneHref}
-                className='inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105'
-                style={{
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  background: 'rgba(255,255,255,0.04)',
-                  color: 'rgba(255,255,255,0.8)'
-                }}
-              >
-                {contacts.phone}
-              </a>
+              <div className='flex flex-col sm:flex-row gap-3'>
+                <a
+                  href='#zayavka'
+                  className='inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-white text-base transition-all hover:scale-105'
+                  style={{
+                    background: 'linear-gradient(135deg, #7d2cc8, #0070f3)',
+                    boxShadow: '0 0 32px rgba(125,44,200,0.4)'
+                  }}
+                >
+                  Обсудить проект →
+                </a>
+                <a
+                  href={contacts.phoneHref}
+                  className='inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105'
+                  style={{
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'rgba(255,255,255,0.04)',
+                    color: 'rgba(255,255,255,0.8)'
+                  }}
+                >
+                  {contacts.phone}
+                </a>
+              </div>
             </div>
           </section>
 
           {/* Кому подходит */}
           <section className='py-16 sm:py-20 px-6 bg-[#0d0d0d]'>
-            <div className='max-w-4xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-3xl font-bold mb-8'>
                 Когда это подходящий вариант
               </h2>
@@ -206,7 +208,7 @@ export default async function ServicePage({
 
           {/* Основной текст */}
           <section className='py-16 sm:py-20 px-6'>
-            <div className='max-w-3xl mx-auto flex flex-col gap-12'>
+            <div className='max-w-5xl mx-auto flex flex-col gap-12 [&>article]:max-w-3xl'>
               {service.sections.map(block => (
                 <article key={block.title}>
                   <h2 className='text-2xl sm:text-3xl font-bold mb-5'>
@@ -282,7 +284,7 @@ export default async function ServicePage({
 
           {/* FAQ */}
           <section className='py-16 sm:py-20 px-6'>
-            <div className='max-w-3xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-3xl font-bold mb-10'>
                 Частые вопросы
               </h2>
@@ -292,18 +294,15 @@ export default async function ServicePage({
 
           {/* Заявка */}
           <section id='zayavka' className='py-16 sm:py-20 px-6 bg-[#0d0d0d]'>
-            <div className='max-w-3xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-3xl font-bold mb-4'>
                 Обсудим ваш проект
               </h2>
-              <p className='text-gray-400 mb-8 leading-relaxed'>
+              <p className='text-gray-400 mb-8 max-w-2xl leading-relaxed'>
                 Разбор задачи занимает 20–30 минут. По итогам у вас есть
                 понимание объёма, цены и сроков — без обязательств продолжать.
               </p>
-              <LeadForm
-                title={`${service.name}: оставьте заявку`}
-                note={`${formatPrice(service.priceFrom)}, срок ${service.duration}. Точную цену назову после разбора задачи.`}
-              />
+              <ContactCta />
             </div>
           </section>
 
@@ -313,7 +312,7 @@ export default async function ServicePage({
               <h2 className='text-2xl sm:text-3xl font-bold mb-4'>
                 Другие типы сайтов
               </h2>
-              <p className='text-gray-400 mb-8 leading-relaxed'>
+              <p className='text-gray-400 mb-8 max-w-2xl leading-relaxed'>
                 Если не уверены, какой вариант подходит под задачу — это
                 нормально. Разберём на первом разговоре.
               </p>

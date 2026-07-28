@@ -4,11 +4,13 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import FaqList from '@/components/FaqList'
 import Footer from '@/components/Footer'
 import JsonLd from '@/components/JsonLd'
-import LeadForm from '@/components/LeadForm'
+import PriceMosaic from '@/components/PriceMosaic'
+import ContactCta from '@/components/ContactCta'
 import { contacts, SITE_URL } from '@/config/contacts'
 import { getPosts } from '@/config/posts'
 import { CATALOG_ROW, formatPrice, getServices } from '@/config/services'
 import { siteConfig } from '@/config/site.config'
+import { rampAccent, rampHsl } from '@/lib/colors'
 import {
   breadcrumbNode,
   faqNode,
@@ -25,7 +27,7 @@ const FULL_URL = `${SITE_URL}${URL_PATH}`
 export const metadata: Metadata = {
   title: 'Создание сайтов под ключ — цены и сроки | Виталий Вронский',
   description:
-    'Создание сайтов под ключ: лендинг от 50 000 ₽, корпоративный сайт от 90 000 ₽, интернет-магазин от 150 000 ₽. Фиксированные цены и сроки в договоре, код передаю вам. Работаю удалённо по всей России.',
+    'Создание сайтов под ключ: лендинг от 20 000 ₽, корпоративный сайт от 90 000 ₽, интернет-магазин от 150 000 ₽. Фиксированные цены и сроки в договоре, код передаю вам. Работаю удалённо по всей России.',
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: URL_PATH },
   keywords: [
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
     siteName: 'Виталий Вронский',
     title: 'Создание сайтов под ключ — цены, сроки и состав работ',
     description:
-      'Лендинг от 50 000 ₽, корпоративный сайт от 90 000 ₽, интернет-магазин от 150 000 ₽. Состав работ и сроки фиксирую договором до старта.',
+      'Лендинг от 20 000 ₽, корпоративный сайт от 90 000 ₽, интернет-магазин от 150 000 ₽. Состав работ и сроки фиксирую договором до старта.',
     locale: 'ru_RU'
   },
   twitter: {
@@ -144,30 +146,52 @@ const stages = [
   }
 ]
 
+function stageHsl(index: number, alpha: number): string {
+  return rampHsl(index / Math.max(stages.length - 1, 1), alpha)
+}
+
+function stageAccent(index: number): string {
+  return rampAccent(index / Math.max(stages.length - 1, 1))
+}
+
+/**
+ * Пазл структуры цены: sm:col-span подобраны так, чтобы каждый ряд
+ * складывался ровно в 6 колонок, а ширина плитки была пропорциональна доле.
+ */
 const priceStructure = [
   {
     part: 'Дизайн и прототип',
     share: '20–30%',
+    span: 'sm:col-span-2',
+    mid: 25,
     note: 'Структура страниц, макеты под бренд, мобильная версия. Экономится, если у вас есть готовый брендбук и подходят типовые сетки.'
   },
   {
     part: 'Вёрстка и разработка',
     share: '30–40%',
+    span: 'sm:col-span-4',
+    mid: 35,
     note: 'Программирование логики, семантическая вёрстка, оптимизация скорости. Почти не сжимается — это основа работоспособности сайта.'
   },
   {
     part: 'Интеграции',
     share: '10–20%',
+    span: 'sm:col-span-2',
+    mid: 15,
     note: 'CRM, онлайн-оплата, аналитика, сторонние API. Полностью зависит от того, сколько систем нужно связать.'
   },
   {
     part: 'Контент и SEO-подготовка',
     share: '10–15%',
+    span: 'sm:col-span-2',
+    mid: 13,
     note: 'Тексты, изображения, заголовки, мета-теги, микроразметка. Самая управляемая часть: готовые материалы снимают её почти целиком.'
   },
   {
     part: 'Тестирование и запуск',
     share: '5–10%',
+    span: 'sm:col-span-2',
+    mid: 7,
     note: 'Проверка на устройствах, перенос на хостинг, приёмка. Урезать нельзя — именно здесь отлавливаются ошибки до того, как их увидят клиенты.'
   }
 ]
@@ -276,7 +300,7 @@ const guarantees = [
 const hubFaq: ServiceFaqItem[] = [
   {
     q: 'Сколько стоит создание сайта под ключ?',
-    a: 'Лендинг — от 50 000 ₽, корпоративный сайт — от 90 000 ₽, каталог с формой заявки — от 120 000 ₽, интернет-магазин — от 150 000 ₽, веб-приложение — от 100 000 ₽. Итоговая цена зависит от количества страниц, интеграций и объёма дизайна с нуля. Точную сумму называю после разбора задачи и фиксирую в договоре.'
+    a: 'Лендинг — от 20 000 ₽, корпоративный сайт — от 90 000 ₽, каталог с формой заявки — от 120 000 ₽, интернет-магазин — от 150 000 ₽, веб-приложение — от 100 000 ₽. Итоговая цена зависит от количества страниц, интеграций и объёма дизайна с нуля. Точную сумму называю после разбора задачи и фиксирую в договоре.'
   },
   {
     q: 'Что входит в стоимость сайта, кроме дизайна и вёрстки?',
@@ -381,77 +405,83 @@ export default function Page() {
 
         <div className='relative z-10'>
           {/* Хиро */}
-          <section className='max-w-5xl mx-auto px-6 pt-12 pb-16 sm:pt-16 sm:pb-24'>
-            <Breadcrumbs items={CRUMBS} />
+          <section className='px-6 pt-12 pb-16 sm:pt-16 sm:pb-24'>
+            <div className='max-w-5xl mx-auto'>
+              <Breadcrumbs items={CRUMBS} />
 
-            <p className='text-xs uppercase tracking-[0.25em] text-gray-500 mb-5 font-mono'>
-              Виталий Вронский — разработчик
-            </p>
+              <p className='text-xs uppercase tracking-[0.25em] text-gray-500 mb-5 font-mono'>
+                Виталий Вронский — разработчик
+              </p>
 
-            <h1 className='text-3xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-6'>
-              Создание сайтов{' '}
-              <span
-                className='bg-clip-text text-transparent'
-                style={{
-                  backgroundImage: 'linear-gradient(135deg, #c084fc, #60a5fa)'
-                }}
-              >
-                под ключ
-              </span>
-            </h1>
-
-            <p className='text-base sm:text-xl text-gray-400 max-w-2xl leading-relaxed mb-8'>
-              Лендинги, корпоративные сайты, интернет-магазины и веб-приложения.
-              Состав работ, цену и сроки фиксирую в договоре до старта, код
-              проекта передаю вам. Работаю удалённо по всей России.
-            </p>
-
-            <div className='flex flex-col sm:flex-row gap-3 mb-12'>
-              <a
-                href='#zayavka'
-                className='inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-white text-base transition-all hover:scale-105'
-                style={{
-                  background: 'linear-gradient(135deg, #7d2cc8, #0070f3)',
-                  boxShadow: '0 0 32px rgba(125,44,200,0.4)'
-                }}
-              >
-                Обсудить проект →
-              </a>
-              <a
-                href={contacts.phoneHref}
-                className='inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105'
-                style={{
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  background: 'rgba(255,255,255,0.04)',
-                  color: 'rgba(255,255,255,0.8)'
-                }}
-              >
-                {contacts.phone}
-              </a>
-            </div>
-
-            {/* Трастовая полоса — видна на всех разрешениях */}
-            <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
-              {trustStrip.map(item => (
-                <div
-                  key={item.label}
-                  className='rounded-2xl px-4 py-4 text-center sm:text-left'
+              <h1 className='text-3xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-6'>
+                Создание сайтов{' '}
+                <span
+                  className='bg-clip-text text-transparent'
                   style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.07)'
+                    backgroundImage: 'linear-gradient(135deg, #c084fc, #60a5fa)'
                   }}
                 >
+                  под ключ
+                </span>
+              </h1>
+
+              <p className='text-base sm:text-xl text-gray-400 max-w-2xl leading-relaxed mb-8'>
+                Лендинги, корпоративные сайты, интернет-магазины и
+                веб-приложения. Состав работ, цену и сроки фиксирую в договоре
+                до старта, код проекта передаю вам. Работаю удалённо по всей
+                России.
+              </p>
+
+              <div className='flex flex-col sm:flex-row gap-3 mb-12'>
+                <a
+                  href='#zayavka'
+                  className='inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-white text-base transition-all hover:scale-105'
+                  style={{
+                    background: 'linear-gradient(135deg, #7d2cc8, #0070f3)',
+                    boxShadow: '0 0 32px rgba(125,44,200,0.4)'
+                  }}
+                >
+                  Обсудить проект →
+                </a>
+                <a
+                  href={contacts.phoneHref}
+                  className='inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105'
+                  style={{
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'rgba(255,255,255,0.04)',
+                    color: 'rgba(255,255,255,0.8)'
+                  }}
+                >
+                  {contacts.phone}
+                </a>
+              </div>
+
+              {/* Трастовая полоса — видна на всех разрешениях */}
+              <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
+                {trustStrip.map(item => (
                   <div
-                    className='text-lg sm:text-xl font-bold bg-clip-text text-transparent'
+                    key={item.label}
+                    className='rounded-2xl px-4 py-4 text-center sm:text-left'
                     style={{
-                      backgroundImage: 'linear-gradient(135deg, #c084fc, #60a5fa)'
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid rgba(255,255,255,0.07)'
                     }}
                   >
-                    {item.value}
+                    <div
+                      className='text-lg sm:text-xl font-bold bg-clip-text text-transparent'
+                      style={{
+                        backgroundImage:
+                          'linear-gradient(135deg, #c084fc, #60a5fa)'
+                      }}
+                    >
+                      {item.value}
+                    </div>
+                    <div className='text-xs text-gray-500 mt-1'>
+                      {item.label}
+                    </div>
                   </div>
-                  <div className='text-xs text-gray-500 mt-1'>{item.label}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
 
@@ -526,7 +556,7 @@ export default function Page() {
 
           {/* Структура цены */}
           <section className='py-16 sm:py-24 px-6'>
-            <div className='max-w-4xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-4xl font-bold mb-4'>
                 Из чего складывается цена сайта
               </h2>
@@ -536,26 +566,7 @@ export default function Page() {
                 разработки, есть готовый брендбук — меньше доля дизайна.
               </p>
 
-              <div className='flex flex-col gap-3'>
-                {priceStructure.map(item => (
-                  <div
-                    key={item.part}
-                    className='flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-6 p-5 rounded-2xl border border-white/8 bg-white/3'
-                  >
-                    <div className='sm:w-56 shrink-0'>
-                      <div className='text-base font-semibold text-white'>
-                        {item.part}
-                      </div>
-                      <div className='text-sm' style={{ color: '#c084fc' }}>
-                        {item.share} бюджета
-                      </div>
-                    </div>
-                    <p className='text-sm text-gray-400 leading-relaxed'>
-                      {item.note}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <PriceMosaic items={priceStructure} />
             </div>
           </section>
 
@@ -632,7 +643,7 @@ export default function Page() {
 
           {/* Этапы */}
           <section className='py-16 sm:py-24 px-6 bg-[#0d0d0d]'>
-            <div className='max-w-4xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-4xl font-bold mb-4'>
                 Этапы разработки — от заявки до запуска
               </h2>
@@ -642,29 +653,49 @@ export default function Page() {
                 фиксируются в договоре.
               </p>
 
-              <ol className='flex flex-col gap-4'>
+              <ol className='flex flex-col'>
                 {stages.map((stage, index) => (
                   <li
                     key={stage.title}
-                    className='flex gap-4 p-5 rounded-2xl border border-white/8 bg-white/3'
+                    className='flex gap-4 sm:gap-5 pb-4 last:pb-0'
                   >
-                    <div
-                      className='shrink-0 size-9 rounded-xl flex items-center justify-center text-sm font-bold'
-                      style={{
-                        background:
-                          'linear-gradient(135deg, rgba(125,44,200,0.2), rgba(0,112,243,0.2))',
-                        border: '1px solid rgba(125,44,200,0.3)',
-                        color: '#c084fc'
-                      }}
-                    >
-                      {index + 1}
+                    {/* Колонка таймлайна: кружок с номером и линия к следующему этапу */}
+                    <div className='flex flex-col items-center shrink-0'>
+                      <div
+                        className='size-10 rounded-full flex items-center justify-center text-sm font-bold'
+                        style={{
+                          background: `linear-gradient(135deg, ${stageHsl(index, 0.24)}, ${stageHsl(index, 0.1)})`,
+                          border: `1px solid ${stageHsl(index, 0.45)}`,
+                          color: stageAccent(index),
+                          boxShadow: `0 0 20px ${stageHsl(index, 0.18)}`
+                        }}
+                      >
+                        {index + 1}
+                      </div>
+                      {index < stages.length - 1 && (
+                        <span
+                          aria-hidden='true'
+                          className='w-px flex-1 mt-2 rounded-full'
+                          style={{
+                            background: `linear-gradient(180deg, ${stageHsl(index, 0.5)}, ${stageHsl(index + 1, 0.18)})`
+                          }}
+                        />
+                      )}
                     </div>
-                    <div>
-                      <div className='flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2'>
-                        <h3 className='text-base font-semibold text-white'>
+
+                    <div className='flex-1 p-5 rounded-2xl border border-white/8 bg-white/3'>
+                      <div className='flex items-start justify-between gap-3 mb-2'>
+                        <h3 className='text-base font-semibold text-white leading-snug'>
                           {stage.title}
                         </h3>
-                        <span className='text-xs text-gray-500'>
+                        <span
+                          className='shrink-0 mt-0.5 px-2.5 py-1 rounded-full text-[11px] whitespace-nowrap'
+                          style={{
+                            border: `1px solid ${stageHsl(index, 0.3)}`,
+                            background: stageHsl(index, 0.1),
+                            color: stageAccent(index)
+                          }}
+                        >
                           {stage.time}
                         </span>
                       </div>
@@ -680,65 +711,104 @@ export default function Page() {
 
           {/* Честные разборы */}
           <section className='py-16 sm:py-24 px-6'>
-            <div className='max-w-3xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-4xl font-bold mb-10'>
                 О чём стоит знать до заказа сайта
               </h2>
 
-              <div className='flex flex-col gap-10'>
-                {honestTakes.map(block => (
-                  <article key={block.title}>
-                    <h3 className='text-xl font-semibold text-white mb-4'>
-                      {block.title}
-                    </h3>
-                    {block.paragraphs.map(paragraph => (
-                      <p
-                        key={paragraph.slice(0, 40)}
-                        className='text-base text-gray-400 leading-relaxed mb-4 last:mb-0'
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
+              <div className='flex flex-col'>
+                {honestTakes.map((block, index) => (
+                  <article
+                    key={block.title}
+                    className='grid md:grid-cols-[15rem_minmax(0,1fr)] gap-4 md:gap-10 py-8 first:pt-0 border-t border-white/8 first:border-t-0'
+                  >
+                    <div className='md:sticky md:top-8 md:self-start'>
+                      <div className='flex items-center gap-3 mb-3'>
+                        <span className='text-xs font-mono text-[#666]'>
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span
+                          aria-hidden='true'
+                          className='h-px w-10'
+                          style={{
+                            background:
+                              'linear-gradient(90deg, rgba(192,132,252,0.6), transparent)'
+                          }}
+                        />
+                      </div>
+                      <h3 className='text-lg sm:text-xl font-semibold text-white leading-snug text-balance'>
+                        {block.title}
+                      </h3>
+                    </div>
+
+                    <div className='max-w-2xl'>
+                      {block.paragraphs.map(paragraph => (
+                        <p
+                          key={paragraph.slice(0, 40)}
+                          className='text-base text-gray-400 leading-relaxed mb-4 last:mb-0'
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
                   </article>
                 ))}
 
                 {/* Чек-лист вопросов — работает и при выборе другого подрядчика */}
-                <article>
-                  <h3 className='text-xl font-semibold text-white mb-4'>
-                    Шесть вопросов, которые стоит задать любому разработчику
-                  </h3>
-                  <p className='text-base text-gray-400 leading-relaxed mb-6'>
-                    Этот список пригодится, даже если вы выберете не меня. По
-                    ответам на эти вопросы обычно сразу видно, с кем вы имеете
-                    дело.
-                  </p>
+                <article className='grid md:grid-cols-[15rem_minmax(0,1fr)] gap-4 md:gap-10 py-8 border-t border-white/8'>
+                  <div className='md:sticky md:top-8 md:self-start'>
+                    <div className='flex items-center gap-3 mb-3'>
+                      <span className='text-xs font-mono text-[#666]'>
+                        {String(honestTakes.length + 1).padStart(2, '0')}
+                      </span>
+                      <span
+                        aria-hidden='true'
+                        className='h-px w-10'
+                        style={{
+                          background:
+                            'linear-gradient(90deg, rgba(96,165,250,0.6), transparent)'
+                        }}
+                      />
+                    </div>
+                    <h3 className='text-lg sm:text-xl font-semibold text-white leading-snug text-balance'>
+                      Шесть вопросов, которые стоит задать любому разработчику
+                    </h3>
+                  </div>
 
-                  <div className='flex flex-col gap-4'>
-                    {contractorQuestions.map((item, index) => (
-                      <div
-                        key={item.q}
-                        className='flex gap-4 p-5 rounded-2xl border border-white/8 bg-white/3'
-                      >
+                  <div>
+                    <p className='text-base text-gray-400 leading-relaxed mb-6 max-w-2xl'>
+                      Этот список пригодится, даже если вы выберете не меня. По
+                      ответам на эти вопросы обычно сразу видно, с кем вы имеете
+                      дело.
+                    </p>
+
+                    <div className='flex flex-col gap-4'>
+                      {contractorQuestions.map((item, index) => (
                         <div
-                          className='shrink-0 size-8 rounded-lg flex items-center justify-center text-xs font-bold'
-                          style={{
-                            background: 'rgba(0,112,243,0.15)',
-                            border: '1px solid rgba(0,112,243,0.3)',
-                            color: '#60a5fa'
-                          }}
+                          key={item.q}
+                          className='flex gap-4 p-5 rounded-2xl border border-white/8 bg-white/3 transition-colors hover:border-white/15 hover:bg-white/5'
                         >
-                          {index + 1}
+                          <div
+                            className='shrink-0 size-8 rounded-full flex items-center justify-center text-xs font-bold'
+                            style={{
+                              background: 'rgba(0,112,243,0.15)',
+                              border: '1px solid rgba(0,112,243,0.3)',
+                              color: '#60a5fa'
+                            }}
+                          >
+                            {index + 1}
+                          </div>
+                          <div>
+                            <p className='text-base font-medium text-white mb-2'>
+                              {item.q}
+                            </p>
+                            <p className='text-sm text-gray-400 leading-relaxed'>
+                              {item.why}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className='text-base font-medium text-white mb-2'>
-                            {item.q}
-                          </p>
-                          <p className='text-sm text-gray-400 leading-relaxed'>
-                            {item.why}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </article>
               </div>
@@ -747,7 +817,7 @@ export default function Page() {
 
           {/* Гарантии */}
           <section className='py-16 sm:py-24 px-6 bg-[#0d0d0d]'>
-            <div className='max-w-4xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-4xl font-bold mb-4'>
                 Гарантии и договор
               </h2>
@@ -802,7 +872,7 @@ export default function Page() {
 
           {/* FAQ */}
           <section className='py-16 sm:py-24 px-6'>
-            <div className='max-w-3xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-4xl font-bold mb-10'>
                 Частые вопросы о заказе сайта
               </h2>
@@ -812,53 +882,17 @@ export default function Page() {
 
           {/* Заявка */}
           <section id='zayavka' className='py-16 sm:py-24 px-6 bg-[#0d0d0d]'>
-            <div className='max-w-3xl mx-auto'>
+            <div className='max-w-5xl mx-auto'>
               <h2 className='text-2xl sm:text-4xl font-bold mb-4'>
                 Обсудим ваш проект
               </h2>
-              <p className='text-gray-400 mb-8 leading-relaxed'>
+              <p className='text-gray-400 mb-8 max-w-2xl leading-relaxed'>
                 Первый шаг — разбор задачи: 20–30 минут разговора, по итогам
                 которых у вас есть понимание объёма, цены и сроков. Бесплатно и
                 без обязательств.
               </p>
 
-              <LeadForm />
-
-              <div className='grid sm:grid-cols-3 gap-4 mt-8'>
-                <a
-                  href={contacts.phoneHref}
-                  className='p-4 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 transition-colors'
-                >
-                  <div className='text-xs uppercase tracking-widest text-[#555] mb-1'>
-                    Телефон
-                  </div>
-                  <div className='text-sm text-white'>{contacts.phone}</div>
-                </a>
-                <a
-                  href={contacts.telegram}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='p-4 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 transition-colors'
-                >
-                  <div className='text-xs uppercase tracking-widest text-[#555] mb-1'>
-                    Telegram
-                  </div>
-                  <div className='text-sm text-white'>
-                    {contacts.telegramHandle}
-                  </div>
-                </a>
-                <a
-                  href={contacts.emailHref}
-                  className='p-4 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 transition-colors'
-                >
-                  <div className='text-xs uppercase tracking-widest text-[#555] mb-1'>
-                    Email
-                  </div>
-                  <div className='text-sm text-white break-all'>
-                    {contacts.email}
-                  </div>
-                </a>
-              </div>
+              <ContactCta />
             </div>
           </section>
 
